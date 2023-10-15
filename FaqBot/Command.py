@@ -145,7 +145,7 @@ class Command:
         if len(found) > 1:
             reply = "Keyword has " + str(len(found)) + " matches:\n\n"
         first = True
-        img = None
+        img = False
         found.sort()
         for e in found:
             if not first:
@@ -153,9 +153,10 @@ class Command:
             reply += "<i><b>" + e.title + "</b></i>\n"
             reply += e.text
             first = False
-            img = e.img
+            if e.img:
+                img = e.img
 
-        if len(found) == 1 and img is not None:
+        if len(found) == 1 and img:
             await update.message.reply_photo(photo=e.img, caption=reply, parse_mode=ParseMode.HTML)
         else:
             await update.message.reply_text(text=reply, parse_mode=ParseMode.HTML)
