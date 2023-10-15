@@ -99,7 +99,7 @@ class Command:
         found = self.findEntries(search_list)
 
         # found did produce an error:
-        if found is not None:
+        if found is None:
             await update.message.reply_text("Please give a list of space-separated keywords to find entries matching ALL keywords (logical-and).\nKnown keywords: " + ", ".join(sorted(self.keywords)))
             return
 
