@@ -29,6 +29,7 @@ class Command:
                     self.keywords[kw].append(e)
                 else:
                     self.keywords[kw] = [e]
+
             # Allow defining a default reply that's returned on '/cmd':
             if e.default:
                 if (self.default == None):
@@ -98,8 +99,8 @@ class Command:
         found = self.findEntries(search_list)
 
         # found did produce an error:
-        if found == None:
-            await update.message.reply_text("Please give a list of space-separated keywords to find entries matching ALL keywords (logical-and).\nKnown keywords: " + ", ".join(self.keywords))
+        if found is not None:
+            await update.message.reply_text("Please give a list of space-separated keywords to find entries matching ALL keywords (logical-and).\nKnown keywords: " + ", ".join(sorted(self.keywords)))
             return
 
         # give a message if nothing was found
@@ -128,6 +129,7 @@ class Command:
             return False
 
         first = True
+        kwlist.sort()
         for k in kwlist:
             if not first:
                 reply += ", "
@@ -144,6 +146,7 @@ class Command:
             reply = "Keyword has " + str(len(found)) + " matches:\n\n"
         first = True
         img = None
+        found.sort()
         for e in found:
             if not first:
                 reply += "\n-------------------------\n\n"
