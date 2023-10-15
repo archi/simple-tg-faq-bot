@@ -94,7 +94,8 @@ class Command:
     async def handler(self, update, context):
         # We expect a list of space separated arguments to the command
         # The 0th argument will be the command itself
-        found = self.findEntries(update.message.text.split(" "))
+        search_list = update.message.text.split(" ")
+        found = self.findEntries(search_list)
 
         # found did produce an error:
         if found == None:
@@ -105,20 +106,52 @@ class Command:
         if len(found) == 0:
             await update.message.reply_text("Nothing found. To get a list of keywords use /" + self.cmddir.name)
             return
+        
+        if len(found) > 3:
+            # it's possible there are no keywords to narrow the search: 
+            if self.replyKeywords(update, found, search_list):
+                return
+        
+        self.replyFound(update, found)
 
+    # try to reply with a list of keywords to narrow the search, return True if replied
+    # if there are not enough keywords to narrow the search, return False
+    async def replyKeywords(self, update, found, search_list):
+        reply = "Got " + str(len(found)) + " results, please narrow the search by adding more keywords: "
+        kwlist = []
+        for e in found:
+            for k in e.keywords:
+                if not k in kwlist and not k in search_list:
+                    kwlist.append(k)
+        
+        if len(kwlist) < len(kwlist) - 2 or len(kwlist) <= 2:
+            return False
+
+        first = True
+        for k in kwlist:
+            if not first:
+                reply += ", "
+            reply += k
+
+        await update.message.reply_text(text=reply, parse_mode=ParseMode.HTML)
+        return True
+
+    async def replyFound(self, update, found):
         # format the result(s) and return them to the user
         reply = ""
         if len(found) > 1:
             reply = "Keyword has " + str(len(found)) + " matches:\n\n"
         first = True
+        img = None
         for e in found:
             if not first:
                 reply += "\n-------------------------\n\n"
             reply += "<i><b>" + e.title + "</b></i>\n"
             reply += e.text
             first = False
+            img = e.img
 
-        if e.img:
+        if len(found) == 1 and img is not None:
             await update.message.reply_photo(photo=e.img, caption=reply, parse_mode=ParseMode.HTML)
         else:
             await update.message.reply_text(text=reply, parse_mode=ParseMode.HTML)
