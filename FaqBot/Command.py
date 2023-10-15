@@ -153,10 +153,10 @@ class Command:
             reply += "<i><b>" + e.title + "</b></i>\n"
             reply += e.text
             first = False
-            if e.img:
+            if e.img and not img:
                 img = e.img
 
         if len(found) == 1 and img:
-            await update.message.reply_photo(photo=e.img, caption=reply, parse_mode=ParseMode.HTML)
+            await update.message.reply_photo(photo=img, caption=reply, parse_mode=ParseMode.HTML)
         else:
             await update.message.reply_text(text=reply, parse_mode=ParseMode.HTML)
