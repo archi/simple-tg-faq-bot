@@ -12,6 +12,16 @@ class Entry:
     img = False
     default = False
 
+    def __eq__(self, other):
+        if not hasattr(other, "title"):
+            return NotImplemented
+        return self.title == other.title
+
+    def __lt__(self, other):
+        if not hasattr(other, "title"):
+            return NotImplemented
+        return self.title < other.title
+
     # set the keywords from a given string, e.g. "foo, bar, baz"
     def setKeywords(self, kwStr):
         # split on "," for ["foo", " bar", " baz"]
