@@ -109,10 +109,10 @@ class Command:
         
         if len(found) > 3:
             # it's possible there are no keywords to narrow the search: 
-            if self.replyKeywords(update, found, search_list):
+            if await self.replyKeywords(update, found, search_list):
                 return
         
-        self.replyFound(update, found)
+        await self.replyFound(update, found)
 
     # try to reply with a list of keywords to narrow the search, return True if replied
     # if there are not enough keywords to narrow the search, return False
