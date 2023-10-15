@@ -29,7 +29,7 @@ class Entry:
             # strip excess whitespaces, and only add unique entries
             s = s.replace(" ", "")
             if not s in self.keywords:
-                self.keywords.append(s)
+                self.keywords.append(s.lower())
 
     # set the short title
     def setShortTitle(self, string):

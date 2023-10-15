@@ -65,8 +65,8 @@ class Command:
         for x in kwListRaw[1:]:
             # split e.g. "foo, bar" into ["foo", " bar"]
             for y in x.split(","):
-                # get rid of excess spaces, e.g. " bar" -> "bar"
-                kw = y.replace(" ", "")
+                # harmonize to lower case and get rid of excess spaces, e.g. " bar" -> "bar"
+                kw = y.lower().replace(" ", "")
                 # skip empty strings
                 if kw == "":
                     continue
