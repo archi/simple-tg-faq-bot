@@ -132,6 +132,7 @@ class Command:
             if not first:
                 reply += ", "
             reply += k
+            first = False
 
         await update.message.reply_text(text=reply, parse_mode=ParseMode.HTML)
         return True
